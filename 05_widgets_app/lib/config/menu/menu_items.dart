@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:widgets_app/presentation/screens/screens.dart';
 
 class MenuItem {
   final String title;
   final String subtitle;
-  final String link;
+  final String nameRoute;
   final IconData icon;
 
   const MenuItem(
       {required this.title,
       required this.subtitle,
-      required this.link,
+      required this.nameRoute,
       required this.icon});
 }
 
@@ -17,11 +18,11 @@ const appMenuItems = <MenuItem>[
   MenuItem(
       title: "Botones",
       subtitle: "Varios botones en Flutter",
-      link: "/buttons",
+      nameRoute: ButtonsScreen.name,
       icon: Icons.smart_button_outlined),
   MenuItem(
       title: "Tarjetas",
       subtitle: "Un contenedor estilizado",
-      link: "/cards",
+      nameRoute: CardsScreen.name,
       icon: Icons.credit_card)
 ];
