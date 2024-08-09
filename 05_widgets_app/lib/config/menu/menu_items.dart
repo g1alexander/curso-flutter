@@ -29,5 +29,15 @@ const appMenuItems = <MenuItem>[
       title: "ProgressIndicatos",
       subtitle: "Generales y controlados",
       nameRoute: ProgressScreen.name,
-      icon: Icons.refresh_rounded)
+      icon: Icons.refresh_rounded),
+  MenuItem(
+      title: "Snackbars y dialogos",
+      subtitle: "indicadores en pantalla",
+      nameRoute: SnackbarScreen.name,
+      icon: Icons.info_outlined),
+  MenuItem(
+      title: "Animated container",
+      subtitle: "stateful widget animado",
+      nameRoute: AnimatedScreen.name,
+      icon: Icons.check_box_outlined)
 ];
