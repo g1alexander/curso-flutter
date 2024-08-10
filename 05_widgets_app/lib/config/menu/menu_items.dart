@@ -39,5 +39,15 @@ const appMenuItems = <MenuItem>[
       title: "Animated container",
       subtitle: "stateful widget animado",
       nameRoute: AnimatedScreen.name,
-      icon: Icons.check_box_outlined)
+      icon: Icons.check_box_outlined),
+  MenuItem(
+      title: "Ui controls + tiles",
+      subtitle: "una serie de controles de flutter",
+      nameRoute: UiControlsScreen.name,
+      icon: Icons.car_rental_outlined),
+  MenuItem(
+      title: "Intro a la App",
+      subtitle: "pequeño tutorial introductorio",
+      nameRoute: AppTutorialScreen.name,
+      icon: Icons.accessible_rounded)
 ];
