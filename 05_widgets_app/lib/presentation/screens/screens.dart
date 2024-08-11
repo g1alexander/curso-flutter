@@ -2,6 +2,7 @@ export 'animated/animated.dart';
 export 'app_tutorial/app_tutorial.dart';
 export 'buttons/buttons.dart';
 export 'cards/cards.dart';
+export 'counter/counter.dart';
 export 'home/home.dart';
 export 'infinite_scroll/infinite_scroll.dart';
 export 'progress/progress.dart';
