@@ -19,4 +19,7 @@ class MoviesRepositoryCubit extends Cubit<MovieState> {
     emit(
         state.copyWith(movies: [...state.movies, ...movies], isLoading: false));
   }
+
+  List<Movie> get getMoviesSlideshow =>
+      state.movies.isNotEmpty ? state.movies.sublist(0, 6) : [];
 }

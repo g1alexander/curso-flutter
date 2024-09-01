@@ -1,4 +1,6 @@
 import 'package:cinemapedia/modules/movies/presentation/cubits/cubits.dart';
+import 'package:cinemapedia/modules/movies/presentation/widgets/widgets.dart';
+import 'package:cinemapedia/modules/shared/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,6 +13,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: _HomeView(),
+      bottomNavigationBar: CustomBottomNavigation(),
     );
   }
 }
@@ -35,20 +38,24 @@ class _HomeViewState extends State<_HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final movies = context.watch<MoviesRepositoryCubit>().state.movies;
-    final isLoading = context.watch<MoviesRepositoryCubit>().state.isLoading;
+    final moviesRepository = context.watch<MoviesRepositoryCubit>();
+
+    final movies = moviesRepository.state.movies;
+    final getMoviesSlideshow = moviesRepository.getMoviesSlideshow;
+    final isLoading = moviesRepository.state.isLoading;
 
     if (isLoading) return const CircularProgressIndicator();
 
-    return ListView.builder(
-      itemCount: movies.length,
-      itemBuilder: (context, index) {
-        final movie = movies[index];
-
-        return ListTile(
-          title: Text(movie.title),
-        );
-      },
+    return Column(
+      children: [
+        const CustomAppbar(),
+        MoviesSlideshow(movies: getMoviesSlideshow),
+        MovieHorizontalListview(
+          movies: movies,
+          title: "En cines",
+          subTitle: 'Lunes 20',
+        )
+      ],
     );
   }
 }
