@@ -1,8 +1,11 @@
-import 'package:cinemapedia/modules/movies/presentation/cubits/movies_repository_cubit.dart';
+import 'package:cinemapedia/modules/movies/presentation/cubits/cubits.dart';
 import 'package:get_it/get_it.dart';
 
 GetIt getIt = GetIt.instance;
 
 void serviceLocatorInit() {
-  getIt.registerSingleton(MoviesRepositoryCubit());
+  getIt.registerSingleton(NowPlayingMoviesCubit());
+  getIt.registerSingleton(PopularMoviesCubit());
+  getIt.registerSingleton(UpcomingMoviesCubit());
+  getIt.registerSingleton(TopRatedMoviesCubit());
 }

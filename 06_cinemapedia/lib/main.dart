@@ -1,5 +1,5 @@
 import 'package:cinemapedia/config/bloc/service_locator.dart';
-import 'package:cinemapedia/modules/movies/presentation/cubits/movies_repository_cubit.dart';
+import 'package:cinemapedia/modules/movies/presentation/cubits/cubits.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cinemapedia/config/theme/app_theme.dart';
@@ -20,7 +20,10 @@ class BlocsProviders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
-      BlocProvider(create: (context) => getIt<MoviesRepositoryCubit>())
+      BlocProvider(create: (context) => getIt<NowPlayingMoviesCubit>()),
+      BlocProvider(create: (context) => getIt<PopularMoviesCubit>()),
+      BlocProvider(create: (context) => getIt<UpcomingMoviesCubit>()),
+      BlocProvider(create: (context) => getIt<TopRatedMoviesCubit>())
     ], child: const MyApp());
   }
 }

@@ -26,35 +26,106 @@ class _HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<_HomeView> {
-  Future<void> _loadNextPage(BuildContext context) async {
-    await context.read<MoviesRepositoryCubit>().loadNextPage();
+  Future<void> _nowPlayingloadNextPage(BuildContext context) async {
+    await context.read<NowPlayingMoviesCubit>().loadNextPage();
+  }
+
+  Future<void> _popularMoviesloadNextPage(BuildContext context) async {
+    await context.read<PopularMoviesCubit>().loadNextPage();
+  }
+
+  Future<void> _upcommingMoviesloadNextPage(BuildContext context) async {
+    await context.read<UpcomingMoviesCubit>().loadNextPage();
+  }
+
+  Future<void> _topRatedMoviesloadNextPage(BuildContext context) async {
+    await context.read<TopRatedMoviesCubit>().loadNextPage();
   }
 
   @override
   void initState() {
     super.initState();
-    _loadNextPage(context);
+    _nowPlayingloadNextPage(context);
+    _popularMoviesloadNextPage(context);
+    _upcommingMoviesloadNextPage(context);
+    _topRatedMoviesloadNextPage(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    final moviesRepository = context.watch<MoviesRepositoryCubit>();
+    final nowPlayingMoviesCubit = context.watch<NowPlayingMoviesCubit>();
+    final nowPlayingMovies = nowPlayingMoviesCubit.state.movies;
+    final isLoadingNowPlaying = nowPlayingMoviesCubit.state.isLoading;
+    final getMoviesSlideshow =
+        context.read<NowPlayingMoviesCubit>().getMoviesSlideshow;
 
-    final movies = moviesRepository.state.movies;
-    final getMoviesSlideshow = moviesRepository.getMoviesSlideshow;
-    final isLoading = moviesRepository.state.isLoading;
+    final popularMoviesCubit = context.watch<PopularMoviesCubit>();
+    final popularMovies = popularMoviesCubit.state.movies;
+    final isLoadingPopular = popularMoviesCubit.state.isLoading;
 
-    if (isLoading) return const CircularProgressIndicator();
+    final upcomingMoviesCubit = context.watch<UpcomingMoviesCubit>();
+    final upcomingMovies = upcomingMoviesCubit.state.movies;
+    final isLoadingUpcoming = upcomingMoviesCubit.state.isLoading;
 
-    return Column(
-      children: [
-        const CustomAppbar(),
-        MoviesSlideshow(movies: getMoviesSlideshow),
-        MovieHorizontalListview(
-          movies: movies,
-          title: "En cines",
-          subTitle: 'Lunes 20',
-        )
+    final topRatedMoviesCubit = context.watch<TopRatedMoviesCubit>();
+    final topRatedMovies = topRatedMoviesCubit.state.movies;
+    final isLoadingTopRated = topRatedMoviesCubit.state.isLoading;
+
+    if (isLoadingNowPlaying ||
+        isLoadingPopular ||
+        isLoadingUpcoming ||
+        isLoadingTopRated) {
+      return const CircularProgressIndicator();
+    }
+
+    return CustomScrollView(
+      slivers: [
+        const SliverAppBar(
+          floating: true,
+          flexibleSpace: FlexibleSpaceBar(
+            titlePadding: EdgeInsets.symmetric(horizontal: 10),
+            title: CustomAppbar(),
+          ),
+        ),
+        SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+          return Column(
+            children: [
+              // CustomAppbar(),
+              MoviesSlideshow(movies: getMoviesSlideshow),
+              MovieHorizontalListview(
+                movies: nowPlayingMovies,
+                title: "En cines",
+                subTitle: 'Lunes 20',
+                loadNextPage: () =>
+                    context.read<NowPlayingMoviesCubit>().loadNextPage(),
+              ),
+              MovieHorizontalListview(
+                movies: upcomingMovies,
+                title: "Próximamente",
+                subTitle: 'En este mes',
+                loadNextPage: () =>
+                    context.read<UpcomingMoviesCubit>().loadNextPage(),
+              ),
+              MovieHorizontalListview(
+                movies: popularMovies,
+                title: "Populares",
+                loadNextPage: () =>
+                    context.read<PopularMoviesCubit>().loadNextPage(),
+              ),
+              MovieHorizontalListview(
+                movies: topRatedMovies,
+                title: "Mejor calificadas",
+                subTitle: 'De todos los tiempos',
+                loadNextPage: () =>
+                    context.read<TopRatedMoviesCubit>().loadNextPage(),
+              ),
+              const SizedBox(
+                height: 10,
+              )
+            ],
+          );
+        }, childCount: 1))
       ],
     );
   }
