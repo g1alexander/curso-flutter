@@ -54,29 +54,26 @@ class _HomeViewState extends State<_HomeView> {
   @override
   Widget build(BuildContext context) {
     final nowPlayingMoviesCubit = context.watch<NowPlayingMoviesCubit>();
+    final popularMoviesCubit = context.watch<PopularMoviesCubit>();
+    final upcomingMoviesCubit = context.watch<UpcomingMoviesCubit>();
+    final topRatedMoviesCubit = context.watch<TopRatedMoviesCubit>();
+
+    final step1 = nowPlayingMoviesCubit.getIsEmpty;
+    final step2 = popularMoviesCubit.getIsEmpty;
+    final step3 = upcomingMoviesCubit.getIsEmpty;
+    final step4 = topRatedMoviesCubit.getIsEmpty;
+
+    final isLoading = step1 || step2 || step3 || step4;
+
+    if (isLoading) return const FullScreenLoader();
+
     final nowPlayingMovies = nowPlayingMoviesCubit.state.movies;
-    final isLoadingNowPlaying = nowPlayingMoviesCubit.state.isLoading;
     final getMoviesSlideshow =
         context.read<NowPlayingMoviesCubit>().getMoviesSlideshow;
 
-    final popularMoviesCubit = context.watch<PopularMoviesCubit>();
     final popularMovies = popularMoviesCubit.state.movies;
-    final isLoadingPopular = popularMoviesCubit.state.isLoading;
-
-    final upcomingMoviesCubit = context.watch<UpcomingMoviesCubit>();
     final upcomingMovies = upcomingMoviesCubit.state.movies;
-    final isLoadingUpcoming = upcomingMoviesCubit.state.isLoading;
-
-    final topRatedMoviesCubit = context.watch<TopRatedMoviesCubit>();
     final topRatedMovies = topRatedMoviesCubit.state.movies;
-    final isLoadingTopRated = topRatedMoviesCubit.state.isLoading;
-
-    if (isLoadingNowPlaying ||
-        isLoadingPopular ||
-        isLoadingUpcoming ||
-        isLoadingTopRated) {
-      return const CircularProgressIndicator();
-    }
 
     return CustomScrollView(
       slivers: [

@@ -21,4 +21,6 @@ class UpcomingMoviesCubit extends Cubit<MovieState> {
     emit(
         state.copyWith(movies: [...state.movies, ...movies], isLoading: false));
   }
+
+  bool get getIsEmpty => state.movies.isEmpty;
 }

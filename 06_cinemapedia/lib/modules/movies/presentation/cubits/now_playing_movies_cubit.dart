@@ -24,4 +24,6 @@ class NowPlayingMoviesCubit extends Cubit<MovieState> {
 
   List<Movie> get getMoviesSlideshow =>
       state.movies.isNotEmpty ? state.movies.sublist(0, 6) : [];
+
+  bool get getIsEmpty => state.movies.isEmpty;
 }
