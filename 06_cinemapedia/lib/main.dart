@@ -24,7 +24,8 @@ class BlocsProviders extends StatelessWidget {
       BlocProvider(create: (context) => getIt<PopularMoviesCubit>()),
       BlocProvider(create: (context) => getIt<UpcomingMoviesCubit>()),
       BlocProvider(create: (context) => getIt<TopRatedMoviesCubit>()),
-      BlocProvider(create: (context) => getIt<MovieInfoCubit>())
+      BlocProvider(create: (context) => getIt<MovieInfoCubit>()),
+      BlocProvider(create: (context) => getIt<ActorsCubit>()),
     ], child: const MyApp());
   }
 }

@@ -1,7 +1,7 @@
 import 'package:cinemapedia/modules/movies/domain/entities/movie.dart';
 import 'package:cinemapedia/modules/movies/infrastructure/datasources/moviedb_datasource.dart';
 import 'package:cinemapedia/modules/movies/infrastructure/repositories/movie_repository_impl.dart';
-import 'package:cinemapedia/modules/movies/presentation/cubits/home/movie_state.dart';
+import 'package:cinemapedia/modules/movies/presentation/cubits/movies/home/movie_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TopRatedMoviesCubit extends Cubit<MovieState> {

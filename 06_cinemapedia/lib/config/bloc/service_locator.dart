@@ -9,4 +9,5 @@ void serviceLocatorInit() {
   getIt.registerSingleton(UpcomingMoviesCubit());
   getIt.registerSingleton(TopRatedMoviesCubit());
   getIt.registerSingleton(MovieInfoCubit());
+  getIt.registerSingleton(ActorsCubit());
 }
