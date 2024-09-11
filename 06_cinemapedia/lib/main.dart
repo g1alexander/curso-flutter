@@ -20,10 +20,7 @@ class BlocsProviders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
-      BlocProvider(create: (context) => getIt<NowPlayingMoviesCubit>()),
-      BlocProvider(create: (context) => getIt<PopularMoviesCubit>()),
-      BlocProvider(create: (context) => getIt<UpcomingMoviesCubit>()),
-      BlocProvider(create: (context) => getIt<TopRatedMoviesCubit>()),
+      BlocProvider(create: (context) => getIt<MoviesCubit>()),
       BlocProvider(create: (context) => getIt<MovieInfoCubit>()),
       BlocProvider(create: (context) => getIt<ActorsCubit>()),
     ], child: const MyApp());

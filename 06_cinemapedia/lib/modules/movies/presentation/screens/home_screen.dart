@@ -26,54 +26,50 @@ class _HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<_HomeView> {
-  Future<void> _nowPlayingloadNextPage(BuildContext context) async {
-    await context.read<NowPlayingMoviesCubit>().loadNextPage();
+  Future<void> _loadNextPage(BuildContext context) async {
+    await context.read<MoviesCubit>().loadNextPageNowPlaying();
+    await context.read<MoviesCubit>().loadNextPagePopular();
+    await context.read<MoviesCubit>().loadNextPageUpcoming();
+    await context.read<MoviesCubit>().loadNextPageTopRated();
   }
 
-  Future<void> _popularMoviesloadNextPage(BuildContext context) async {
-    await context.read<PopularMoviesCubit>().loadNextPage();
-  }
+  // Future<void> _popularMoviesloadNextPage(BuildContext context) async {
+  // }
 
-  Future<void> _upcommingMoviesloadNextPage(BuildContext context) async {
-    await context.read<UpcomingMoviesCubit>().loadNextPage();
-  }
+  // Future<void> _upcommingMoviesloadNextPage(BuildContext context) async {
+  // }
 
-  Future<void> _topRatedMoviesloadNextPage(BuildContext context) async {
-    await context.read<TopRatedMoviesCubit>().loadNextPage();
-  }
+  // Future<void> _topRatedMoviesloadNextPage(BuildContext context) async {
+  // }
 
   @override
   void initState() {
     super.initState();
-    _nowPlayingloadNextPage(context);
-    _popularMoviesloadNextPage(context);
-    _upcommingMoviesloadNextPage(context);
-    _topRatedMoviesloadNextPage(context);
+    _loadNextPage(context);
+    // _popularMoviesloadNextPage(context);
+    // _upcommingMoviesloadNextPage(context);
+    // _topRatedMoviesloadNextPage(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    final nowPlayingMoviesCubit = context.watch<NowPlayingMoviesCubit>();
-    final popularMoviesCubit = context.watch<PopularMoviesCubit>();
-    final upcomingMoviesCubit = context.watch<UpcomingMoviesCubit>();
-    final topRatedMoviesCubit = context.watch<TopRatedMoviesCubit>();
+    final moviesCubit = context.watch<MoviesCubit>();
 
-    final step1 = nowPlayingMoviesCubit.getIsEmpty;
-    final step2 = popularMoviesCubit.getIsEmpty;
-    final step3 = upcomingMoviesCubit.getIsEmpty;
-    final step4 = topRatedMoviesCubit.getIsEmpty;
+    final step1 = moviesCubit.getIsEmpty('nowPlayingMovies');
+    final step2 = moviesCubit.getIsEmpty('popularMovies');
+    final step3 = moviesCubit.getIsEmpty('upcomingMovies');
+    final step4 = moviesCubit.getIsEmpty('topRatedMovies');
 
     final isLoading = step1 || step2 || step3 || step4;
 
     if (isLoading) return const FullScreenLoader();
 
-    final nowPlayingMovies = nowPlayingMoviesCubit.state.movies;
-    final getMoviesSlideshow =
-        context.read<NowPlayingMoviesCubit>().getMoviesSlideshow;
+    final nowPlayingMovies = moviesCubit.state.nowPlayingMovies;
+    final getMoviesSlideshow = context.read<MoviesCubit>().getMoviesSlideshow;
 
-    final popularMovies = popularMoviesCubit.state.movies;
-    final upcomingMovies = upcomingMoviesCubit.state.movies;
-    final topRatedMovies = topRatedMoviesCubit.state.movies;
+    final popularMovies = moviesCubit.state.popularMovies;
+    final upcomingMovies = moviesCubit.state.upcomingMovies;
+    final topRatedMovies = moviesCubit.state.topRatedMovies;
 
     return CustomScrollView(
       slivers: [
@@ -95,27 +91,27 @@ class _HomeViewState extends State<_HomeView> {
                 title: "En cines",
                 subTitle: 'Lunes 20',
                 loadNextPage: () =>
-                    context.read<NowPlayingMoviesCubit>().loadNextPage(),
+                    context.read<MoviesCubit>().loadNextPageNowPlaying(),
               ),
               MovieHorizontalListview(
                 movies: upcomingMovies,
                 title: "Próximamente",
                 subTitle: 'En este mes',
                 loadNextPage: () =>
-                    context.read<UpcomingMoviesCubit>().loadNextPage(),
+                    context.read<MoviesCubit>().loadNextPageUpcoming(),
               ),
               MovieHorizontalListview(
                 movies: popularMovies,
                 title: "Populares",
                 loadNextPage: () =>
-                    context.read<PopularMoviesCubit>().loadNextPage(),
+                    context.read<MoviesCubit>().loadNextPagePopular(),
               ),
               MovieHorizontalListview(
                 movies: topRatedMovies,
                 title: "Mejor calificadas",
                 subTitle: 'De todos los tiempos',
                 loadNextPage: () =>
-                    context.read<TopRatedMoviesCubit>().loadNextPage(),
+                    context.read<MoviesCubit>().loadNextPageTopRated(),
               ),
               const SizedBox(
                 height: 10,
