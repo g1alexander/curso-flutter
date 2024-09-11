@@ -1,14 +1,11 @@
 import 'package:cinemapedia/modules/movies/domain/entities/movie.dart';
-import 'package:cinemapedia/modules/movies/infrastructure/datasources/moviedb_datasource.dart';
 import 'package:cinemapedia/modules/movies/infrastructure/repositories/movie_repository_impl.dart';
 import 'package:cinemapedia/modules/movies/presentation/cubits/movies/home/movie_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NowPlayingMoviesCubit extends Cubit<MovieState> {
   final MovieRepositoryImpl _movieRepository;
-  NowPlayingMoviesCubit()
-      : _movieRepository = MovieRepositoryImpl(MoviedbDatasource()),
-        super(const MovieState());
+  NowPlayingMoviesCubit(this._movieRepository) : super(const MovieState());
 
   Future<void> loadNextPage() async {
     if (state.isLoading) return;
