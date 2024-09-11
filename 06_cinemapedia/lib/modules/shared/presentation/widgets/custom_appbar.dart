@@ -1,4 +1,9 @@
+import 'package:cinemapedia/modules/movies/domain/entities/movie.dart';
+import 'package:cinemapedia/modules/movies/presentation/cubits/movies/home/movies_cubit.dart';
+import 'package:cinemapedia/modules/shared/presentation/delegates/search_movie_delegate.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomAppbar extends StatelessWidget {
   const CustomAppbar({super.key});
@@ -28,7 +33,21 @@ class CustomAppbar extends StatelessWidget {
                   style: textTheme.titleMedium,
                 ),
                 const Spacer(),
-                IconButton(onPressed: () {}, icon: const Icon(Icons.search))
+                IconButton(
+                    onPressed: () {
+                      final moviesCubit = context.read<MoviesCubit>();
+
+                      showSearch<Movie?>(
+                              context: context,
+                              delegate: SearchMovieDelegate(
+                                  searchMovies:
+                                      moviesCubit.movieRepository.searchMovies))
+                          .then((movie) {
+                        if (movie == null || !context.mounted) return;
+                        context.push("/movie/${movie.id}");
+                      });
+                    },
+                    icon: const Icon(Icons.search))
               ],
             ),
           ),
