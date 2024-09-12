@@ -1,5 +1,5 @@
 import 'package:cinemapedia/modules/movies/domain/entities/movie.dart';
-import 'package:cinemapedia/modules/movies/presentation/cubits/movies/home/movies_cubit.dart';
+import 'package:cinemapedia/modules/movies/presentation/cubits/search/search_cubit.dart';
 import 'package:cinemapedia/modules/shared/presentation/delegates/search_movie_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,13 +35,16 @@ class CustomAppbar extends StatelessWidget {
                 const Spacer(),
                 IconButton(
                     onPressed: () {
-                      final moviesCubit = context.read<MoviesCubit>();
+                      final searchCubit = context.read<SearchCubit>();
 
                       showSearch<Movie?>(
+                              query: searchCubit.state.query,
                               context: context,
                               delegate: SearchMovieDelegate(
+                                  initialMovies:
+                                      searchCubit.state.searchedMovies,
                                   searchMovies:
-                                      moviesCubit.movieRepository.searchMovies))
+                                      searchCubit.setSearchMoviesByQuery))
                           .then((movie) {
                         if (movie == null || !context.mounted) return;
                         context.push("/movie/${movie.id}");

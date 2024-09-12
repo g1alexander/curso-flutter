@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:cinemapedia/config/helpers/human_formats.dart';
 import 'package:cinemapedia/modules/movies/domain/entities/movie.dart';
@@ -6,39 +8,45 @@ import 'package:flutter/material.dart';
 typedef SearchMovieCallback = Future<List<Movie>> Function(String query);
 
 class SearchMovieDelegate extends SearchDelegate<Movie?> {
+  SearchMovieDelegate(
+      {required this.searchMovies, required this.initialMovies});
+
   final SearchMovieCallback searchMovies;
+  List<Movie> initialMovies;
 
-  SearchMovieDelegate({required this.searchMovies});
+  StreamController<bool> isLoadingStream = StreamController.broadcast();
+  StreamController<List<Movie>> debouncedMovies = StreamController.broadcast();
+  Timer? _debounceTimer;
 
-  @override
-  String get searchFieldLabel => 'Buscar película';
-
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    return [
-      FadeIn(
-          animate: query.isNotEmpty,
-          child: IconButton(
-              onPressed: () => query = '', icon: const Icon(Icons.clear)))
-    ];
+  void clearStreams() {
+    debouncedMovies.close();
+    isLoadingStream.close();
   }
 
-  @override
-  Widget? buildLeading(BuildContext context) {
-    return IconButton(
-        onPressed: () => close(context, null),
-        icon: const Icon(Icons.arrow_back_ios_new_outlined));
+  void _onQueryChanged(String query) {
+    isLoadingStream.add(true);
+
+    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+
+    _debounceTimer = Timer(
+      const Duration(milliseconds: 500),
+      () async {
+        final movies = await searchMovies(query);
+        initialMovies = movies;
+        if (!debouncedMovies.isClosed) {
+          debouncedMovies.add(movies);
+        }
+        if (!isLoadingStream.isClosed) {
+          isLoadingStream.add(false);
+        }
+      },
+    );
   }
 
-  @override
-  Widget buildResults(BuildContext context) {
-    return const Text("results");
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    return FutureBuilder(
-      future: searchMovies(query),
+  Widget buildResultsAndSuggestions() {
+    return StreamBuilder(
+      stream: debouncedMovies.stream,
+      initialData: initialMovies,
       builder: (context, snapshot) {
         final movies = snapshot.data ?? [];
 
@@ -46,11 +54,60 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
           itemCount: movies.length,
           itemBuilder: (context, index) => _MovieItem(
             movie: movies[index],
-            onMovieSelected: close,
+            onMovieSelected: (context, movie) {
+              clearStreams();
+              close(context, movie);
+            },
           ),
         );
       },
     );
+  }
+
+  @override
+  String get searchFieldLabel => 'Buscar película';
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      StreamBuilder(
+        stream: isLoadingStream.stream,
+        builder: (context, snapshot) {
+          final isLoading = snapshot.data ?? false;
+
+          return isLoading
+              ? SpinPerfect(
+                  infinite: true,
+                  child: IconButton(
+                      onPressed: () => query = '',
+                      icon: const Icon(Icons.refresh_rounded)))
+              : FadeIn(
+                  animate: query.isNotEmpty,
+                  child: IconButton(
+                      onPressed: () => query = '',
+                      icon: const Icon(Icons.clear)));
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+        onPressed: () => {clearStreams(), close(context, null)},
+        icon: const Icon(Icons.arrow_back_ios_new_outlined));
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return buildResultsAndSuggestions();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    _onQueryChanged(query);
+
+    return buildResultsAndSuggestions();
   }
 }
 

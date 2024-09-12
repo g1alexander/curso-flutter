@@ -4,8 +4,8 @@ import 'package:cinemapedia/modules/movies/presentation/cubits/cubits.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MoviesCubit extends Cubit<MovieState> {
-  final MovieRepositoryImpl movieRepository;
-  MoviesCubit(this.movieRepository) : super(const MovieState());
+  final MovieRepositoryImpl _movieRepository;
+  MoviesCubit(this._movieRepository) : super(const MovieState());
 
   Future<void> loadNextPageNowPlaying() async {
     if (state.isLoading) return;
@@ -14,7 +14,7 @@ class MoviesCubit extends Cubit<MovieState> {
         currentPages: {'nowPlaying': state.currentPages['nowPlaying']! + 1},
         isLoading: true));
 
-    final List<Movie> movies = await movieRepository.getNowPlaying(
+    final List<Movie> movies = await _movieRepository.getNowPlaying(
         page: state.currentPages['nowPlaying']!);
 
     emit(state.copyWith(
@@ -30,7 +30,7 @@ class MoviesCubit extends Cubit<MovieState> {
         isLoading: true));
 
     final List<Movie> movies =
-        await movieRepository.getPopular(page: state.currentPages['popular']!);
+        await _movieRepository.getPopular(page: state.currentPages['popular']!);
 
     emit(state.copyWith(
         popularMovies: [...state.popularMovies, ...movies], isLoading: false));
@@ -43,7 +43,7 @@ class MoviesCubit extends Cubit<MovieState> {
         currentPages: {'topRated': state.currentPages['topRated']! + 1},
         isLoading: true));
 
-    final List<Movie> movies = await movieRepository.getTopRated(
+    final List<Movie> movies = await _movieRepository.getTopRated(
         page: state.currentPages['topRated']!);
 
     emit(state.copyWith(
@@ -58,7 +58,7 @@ class MoviesCubit extends Cubit<MovieState> {
         currentPages: {'upcoming': state.currentPages['upcoming']! + 1},
         isLoading: true));
 
-    final List<Movie> movies = await movieRepository.getUpcoming(
+    final List<Movie> movies = await _movieRepository.getUpcoming(
         page: state.currentPages['upcoming']!);
 
     emit(state.copyWith(
