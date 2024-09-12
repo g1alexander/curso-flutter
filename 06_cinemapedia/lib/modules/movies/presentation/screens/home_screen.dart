@@ -28,27 +28,18 @@ class _HomeView extends StatefulWidget {
 class _HomeViewState extends State<_HomeView> {
   Future<void> _loadNextPage(BuildContext context) async {
     await context.read<MoviesCubit>().loadNextPageNowPlaying();
+    if (!context.mounted) return;
     await context.read<MoviesCubit>().loadNextPagePopular();
+    if (!context.mounted) return;
     await context.read<MoviesCubit>().loadNextPageUpcoming();
+    if (!context.mounted) return;
     await context.read<MoviesCubit>().loadNextPageTopRated();
   }
-
-  // Future<void> _popularMoviesloadNextPage(BuildContext context) async {
-  // }
-
-  // Future<void> _upcommingMoviesloadNextPage(BuildContext context) async {
-  // }
-
-  // Future<void> _topRatedMoviesloadNextPage(BuildContext context) async {
-  // }
 
   @override
   void initState() {
     super.initState();
     _loadNextPage(context);
-    // _popularMoviesloadNextPage(context);
-    // _upcommingMoviesloadNextPage(context);
-    // _topRatedMoviesloadNextPage(context);
   }
 
   @override
