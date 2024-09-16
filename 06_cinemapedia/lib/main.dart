@@ -1,6 +1,6 @@
 import 'package:cinemapedia/config/bloc/service_locator.dart';
 import 'package:cinemapedia/modules/movies/presentation/cubits/cubits.dart';
-import 'package:cinemapedia/modules/movies/presentation/cubits/storage/local_storage_cubit.dart';
+import 'package:cinemapedia/modules/movies/presentation/cubits/storage/storage_movies_cubit.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cinemapedia/config/theme/app_theme.dart';
@@ -26,7 +26,7 @@ class BlocsProviders extends StatelessWidget {
       BlocProvider(create: (context) => getIt<ActorsCubit>()),
       BlocProvider(create: (context) => getIt<SearchCubit>()),
       BlocProvider(
-        create: (context) => getIt<LocalStorageCubit>(),
+        create: (context) => getIt<StorageMoviesCubit>(),
       )
     ], child: const MyApp());
   }

@@ -1,6 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:cinemapedia/modules/movies/domain/entities/movie.dart';
-import 'package:cinemapedia/modules/movies/presentation/cubits/storage/local_storage_cubit.dart';
+import 'package:cinemapedia/modules/movies/presentation/cubits/storage/storage_movies_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:cinemapedia/modules/movies/presentation/cubits/cubits.dart';
@@ -210,7 +210,7 @@ class _CustomSliverAppBar extends StatefulWidget {
 
 class _CustomSliverAppBarState extends State<_CustomSliverAppBar> {
   Future<void> isFavorite(BuildContext context, int movieId) async {
-    await context.read<LocalStorageCubit>().isFavorite(movieId);
+    await context.read<StorageMoviesCubit>().isFavorite(movieId);
   }
 
   @override
@@ -222,7 +222,7 @@ class _CustomSliverAppBarState extends State<_CustomSliverAppBar> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final isFavorite = context.watch<LocalStorageCubit>().state.isFavorite;
+    final isFavorite = context.watch<StorageMoviesCubit>().state.isFavorite;
 
     return SliverAppBar(
       backgroundColor: Colors.black,
@@ -232,7 +232,7 @@ class _CustomSliverAppBarState extends State<_CustomSliverAppBar> {
         IconButton(
           onPressed: () async {
             await context
-                .read<LocalStorageCubit>()
+                .read<StorageMoviesCubit>()
                 .toggleFavorite(widget.movie);
           },
           icon: isFavorite
