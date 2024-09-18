@@ -1,3 +1,4 @@
+import 'package:cinemapedia/config/helpers/human_formats.dart';
 import 'package:cinemapedia/modules/shared/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:cinemapedia/modules/movies/presentation/cubits/cubits.dart';
@@ -66,7 +67,7 @@ class _HomeViewState extends State<HomeView> {
               MovieHorizontalListview(
                 movies: nowPlayingMovies,
                 title: "En cines",
-                subTitle: 'Lunes 20',
+                subTitle: HumanFormats.date(DateTime.now()),
                 loadNextPage: () =>
                     context.read<MoviesCubit>().loadNextPageNowPlaying(),
               ),

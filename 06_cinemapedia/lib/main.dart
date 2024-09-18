@@ -1,4 +1,5 @@
 import 'package:cinemapedia/config/get_it/service_locator.dart';
+import 'package:cinemapedia/config/helpers/human_formats.dart';
 import 'package:cinemapedia/modules/movies/presentation/cubits/cubits.dart';
 import 'package:cinemapedia/modules/movies/presentation/cubits/storage/storage_movies_cubit.dart';
 import 'package:cinemapedia/modules/shared/presentation/cubit/darkmode_cubit.dart';
@@ -10,6 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
+  await HumanFormats.initialize();
+
   await dotenv.load(fileName: '.env');
 
   serviceLocatorInit();
