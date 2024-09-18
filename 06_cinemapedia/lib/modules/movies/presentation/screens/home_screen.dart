@@ -1,24 +1,19 @@
-import 'package:cinemapedia/modules/movies/presentation/views/views.dart';
 import 'package:cinemapedia/modules/shared/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatelessWidget {
   static const name = 'home-screen';
 
-  final int pageIndex;
+  final StatefulNavigationShell currentChild;
 
-  const HomeScreen({super.key, required this.pageIndex});
-
-  final viewRoutes = const <Widget>[HomeView(), SizedBox(), FavoritesView()];
+  const HomeScreen({super.key, required this.currentChild});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: pageIndex,
-        children: viewRoutes,
-      ),
-      bottomNavigationBar: CustomBottomNavigation(currentIndex: pageIndex),
+      body: currentChild,
+      bottomNavigationBar: CustomBottomNavigation(currentChild: currentChild),
     );
   }
 }

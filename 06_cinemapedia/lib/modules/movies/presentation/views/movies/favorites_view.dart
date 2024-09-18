@@ -52,7 +52,7 @@ class _FavoritesViewState extends State<FavoritesView> {
               height: 20,
             ),
             FilledButton.tonal(
-                onPressed: () => context.go('/home/0'),
+                onPressed: () => context.go('/'),
                 child: const Text("Empieza a buscar"))
           ],
         ),

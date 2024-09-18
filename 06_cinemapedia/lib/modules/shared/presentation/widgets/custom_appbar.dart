@@ -55,7 +55,7 @@ class CustomAppbar extends StatelessWidget {
                                       searchCubit.setSearchMoviesByQuery))
                           .then((movie) {
                         if (movie == null || !context.mounted) return;
-                        context.push("/home/0/movie/${movie.id}");
+                        context.push("/movie/${movie.id}");
                       });
                     },
                     icon: const Icon(Icons.search))
