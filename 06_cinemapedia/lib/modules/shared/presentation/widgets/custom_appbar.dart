@@ -1,5 +1,6 @@
 import 'package:cinemapedia/modules/movies/domain/entities/movie.dart';
 import 'package:cinemapedia/modules/movies/presentation/cubits/search/search_cubit.dart';
+import 'package:cinemapedia/modules/shared/presentation/cubit/darkmode_cubit.dart';
 import 'package:cinemapedia/modules/shared/presentation/delegates/search_movie_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +13,7 @@ class CustomAppbar extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final isDarkMode = context.watch<DarkmodeCubit>().state.isDarkMode;
 
     return SafeArea(
         bottom: false,
@@ -33,6 +35,12 @@ class CustomAppbar extends StatelessWidget {
                   style: textTheme.titleMedium,
                 ),
                 const Spacer(),
+                IconButton(
+                    onPressed: () =>
+                        context.read<DarkmodeCubit>().setState(!isDarkMode),
+                    icon: Icon(isDarkMode
+                        ? Icons.light_mode_outlined
+                        : Icons.dark_mode_outlined)),
                 IconButton(
                     onPressed: () {
                       final searchCubit = context.read<SearchCubit>();

@@ -1,6 +1,7 @@
-import 'package:cinemapedia/config/bloc/service_locator.dart';
+import 'package:cinemapedia/config/get_it/service_locator.dart';
 import 'package:cinemapedia/modules/movies/presentation/cubits/cubits.dart';
 import 'package:cinemapedia/modules/movies/presentation/cubits/storage/storage_movies_cubit.dart';
+import 'package:cinemapedia/modules/shared/presentation/cubit/darkmode_cubit.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cinemapedia/config/theme/app_theme.dart';
@@ -27,6 +28,9 @@ class BlocsProviders extends StatelessWidget {
       BlocProvider(create: (context) => getIt<SearchCubit>()),
       BlocProvider(
         create: (context) => getIt<StorageMoviesCubit>(),
+      ),
+      BlocProvider(
+        create: (context) => getIt<DarkmodeCubit>(),
       )
     ], child: const MyApp());
   }
@@ -37,9 +41,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = context.watch<DarkmodeCubit>().state.isDarkMode;
+
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      theme: AppTheme().getTheme(),
+      theme: AppTheme().getTheme(isDarkMode),
       routerConfig: appRouter,
     );
   }

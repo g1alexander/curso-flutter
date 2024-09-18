@@ -6,6 +6,7 @@ import 'package:cinemapedia/modules/movies/infrastructure/repositories/local_sto
 import 'package:cinemapedia/modules/movies/infrastructure/repositories/movie_repository_impl.dart';
 import 'package:cinemapedia/modules/movies/presentation/cubits/cubits.dart';
 import 'package:cinemapedia/modules/movies/presentation/cubits/storage/storage_movies_cubit.dart';
+import 'package:cinemapedia/modules/shared/presentation/cubit/darkmode_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 GetIt getIt = GetIt.instance;
@@ -21,4 +22,6 @@ void serviceLocatorInit() {
       .registerSingleton(SearchCubit(MovieRepositoryImpl(MoviedbDatasource())));
   getIt.registerSingleton(
       StorageMoviesCubit(LocalStorageRepositoryImpl(IsarDatasource())));
+
+  getIt.registerSingleton(DarkmodeCubit());
 }
