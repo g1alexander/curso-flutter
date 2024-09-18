@@ -14,9 +14,9 @@ class HumanFormats {
     return formatterNumber;
   }
 
-  static String date(DateTime nowDate) {
-    final formatter = DateFormat('EEEE d', 'es_ES');
-    final formattedDate = formatter.format(nowDate);
+  static String dateFormat({required DateTime date, String format = 'EEEE d'}) {
+    final formatter = DateFormat(format, 'es_ES');
+    final formattedDate = formatter.format(date);
 
     return toBeginningOfSentenceCase(formattedDate);
   }

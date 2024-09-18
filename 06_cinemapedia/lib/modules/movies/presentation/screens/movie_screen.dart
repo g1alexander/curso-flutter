@@ -1,6 +1,8 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:cinemapedia/config/helpers/human_formats.dart';
 import 'package:cinemapedia/modules/movies/domain/entities/movie.dart';
 import 'package:cinemapedia/modules/movies/presentation/cubits/storage/storage_movies_cubit.dart';
+import 'package:cinemapedia/modules/movies/presentation/widgets/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:cinemapedia/modules/movies/presentation/cubits/cubits.dart';
@@ -81,7 +83,7 @@ class _MovieDetails extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -104,7 +106,26 @@ class _MovieDetails extends StatelessWidget {
                       movie.title,
                       style: textTheme.titleLarge,
                     ),
-                    Text(movie.overview)
+                    Text(movie.overview),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    MovieRating(
+                      voteAverage: movie.voteAverage,
+                    ),
+                    Row(
+                      children: [
+                        const Text("Estreno:",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            )),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(HumanFormats.dateFormat(
+                            date: movie.releaseDate, format: 'EEE, d MMM yyyy'))
+                      ],
+                    )
                   ],
                 ),
               ),

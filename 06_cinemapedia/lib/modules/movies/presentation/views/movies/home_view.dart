@@ -67,7 +67,7 @@ class _HomeViewState extends State<HomeView> {
               MovieHorizontalListview(
                 movies: nowPlayingMovies,
                 title: "En cines",
-                subTitle: HumanFormats.date(DateTime.now()),
+                subTitle: HumanFormats.dateFormat(date: DateTime.now()),
                 loadNextPage: () =>
                     context.read<MoviesCubit>().loadNextPageNowPlaying(),
               ),
