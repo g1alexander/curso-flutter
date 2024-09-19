@@ -145,10 +145,10 @@ class _MovieDetails extends StatelessWidget {
             ],
           ),
         ),
-        ActorsByMovie(
+        MovieActors(
           movieId: '${movie.id}',
         ),
-        VideoTrailerByMovie(
+        MovieVideoTrailer(
           movieId: '${movie.id}',
         ),
         const SizedBox(

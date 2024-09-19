@@ -3,10 +3,10 @@ import 'package:cinemapedia/modules/movies/presentation/cubits/cubits.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
-class ActorsByMovie extends StatelessWidget {
+class MovieActors extends StatelessWidget {
   final String movieId;
 
-  const ActorsByMovie({super.key, required this.movieId});
+  const MovieActors({super.key, required this.movieId});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class ActorsByMovie extends StatelessWidget {
     final actors = actorsByMovie[movieId]!;
 
     return SizedBox(
-      height: 300,
+      height: 250,
       child: ListView.builder(
         itemCount: actors.length,
         scrollDirection: Axis.horizontal,

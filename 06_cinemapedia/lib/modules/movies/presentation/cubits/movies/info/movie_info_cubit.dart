@@ -20,4 +20,16 @@ class MovieInfoCubit extends Cubit<MovieInfoState> {
     emit(state.copyWith(
         isLoading: false, movieMap: {...state.movieMap, movieId: movie}));
   }
+
+  Future<String> getVideoByMovieId(String id) async {
+    if (state.isLoading) return '';
+
+    emit(state.copyWith(isLoading: true));
+
+    final keyVideo = await _movieRepository.getVideoByMovieId(id);
+
+    emit(state.copyWith(isLoading: false));
+
+    return keyVideo;
+  }
 }
