@@ -148,7 +148,16 @@ class _MovieDetails extends StatelessWidget {
         MovieActors(
           movieId: '${movie.id}',
         ),
+        const SizedBox(
+          height: 20,
+        ),
         MovieVideoTrailer(
+          movieId: '${movie.id}',
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        MovieRecommendations(
           movieId: '${movie.id}',
         ),
         const SizedBox(

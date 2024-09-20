@@ -28,8 +28,18 @@ class MovieInfoCubit extends Cubit<MovieInfoState> {
 
     final keyVideo = await _movieRepository.getVideoByMovieId(id);
 
-    emit(state.copyWith(isLoading: false));
+    emit(state.copyWith(isLoading: false, keyVideo: keyVideo));
 
     return keyVideo;
+  }
+
+  Future<void> loadRecommendations(String id) async {
+    emit(state.copyWith(isLoading: true));
+
+    final recommendations =
+        await _movieRepository.getRecommendationsByMovieId(id);
+
+    emit(state.copyWith(
+        isLoading: false, recommendationsMovies: recommendations));
   }
 }
