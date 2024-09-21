@@ -17,8 +17,6 @@ class _HomeViewState extends State<HomeView> {
   Future<void> _loadNextPage(BuildContext context) async {
     await context.read<MoviesCubit>().loadNextPageNowPlaying();
     if (!context.mounted) return;
-    await context.read<MoviesCubit>().loadNextPagePopular();
-    if (!context.mounted) return;
     await context.read<MoviesCubit>().loadNextPageUpcoming();
     if (!context.mounted) return;
     await context.read<MoviesCubit>().loadNextPageTopRated();
@@ -35,18 +33,16 @@ class _HomeViewState extends State<HomeView> {
     final moviesCubit = context.watch<MoviesCubit>();
 
     final step1 = moviesCubit.getIsEmpty('nowPlayingMovies');
-    final step2 = moviesCubit.getIsEmpty('popularMovies');
-    final step3 = moviesCubit.getIsEmpty('upcomingMovies');
-    final step4 = moviesCubit.getIsEmpty('topRatedMovies');
+    final step2 = moviesCubit.getIsEmpty('upcomingMovies');
+    final step3 = moviesCubit.getIsEmpty('topRatedMovies');
 
-    final isLoading = step1 || step2 || step3 || step4;
+    final isLoading = step1 || step2 || step3;
 
     if (isLoading) return const FullScreenLoader();
 
     final nowPlayingMovies = moviesCubit.state.nowPlayingMovies;
     final getMoviesSlideshow = context.read<MoviesCubit>().getMoviesSlideshow;
 
-    final popularMovies = moviesCubit.state.popularMovies;
     final upcomingMovies = moviesCubit.state.upcomingMovies;
     final topRatedMovies = moviesCubit.state.topRatedMovies;
 
@@ -79,15 +75,9 @@ class _HomeViewState extends State<HomeView> {
                     context.read<MoviesCubit>().loadNextPageUpcoming(),
               ),
               MovieHorizontalListview(
-                movies: popularMovies,
-                title: "Populares",
-                loadNextPage: () =>
-                    context.read<MoviesCubit>().loadNextPagePopular(),
-              ),
-              MovieHorizontalListview(
                 movies: topRatedMovies,
                 title: "Mejor calificadas",
-                subTitle: 'De todos los tiempos',
+                subTitle: 'Desde siempre',
                 loadNextPage: () =>
                     context.read<MoviesCubit>().loadNextPageTopRated(),
               ),
