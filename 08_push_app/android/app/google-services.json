@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "154077645817",
+    "project_id": "flutter-curso-ac172",
+    "storage_bucket": "flutter-curso-ac172.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154077645817:android:ff2cdf302ba32e1240cb28",
+        "android_client_info": {
+          "package_name": "com.g1alexander.push_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5jYttD1gOo8A9rlOxWYr6q472EB1gckQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
