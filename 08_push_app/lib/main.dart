@@ -10,7 +10,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   await NotificationsBloc.initializeFCM();
-  await LocalNotifications.initialize();
+  // await LocalNotifications.initialize();
 
   runApp(MultiBlocProvider(providers: [
     BlocProvider(
