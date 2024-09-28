@@ -1,7 +1,4 @@
-version: '3'
-
 services:
-
   app:
     container_name: nest-app
     image: klerith/flutter-backend-teslo-shop:latest
@@ -20,7 +17,7 @@ services:
       PORT: ${PORT}
       HOST_API: ${HOST_API}
       JWT_SECRET: ${JWT_SECRET}
-  
+
   db:
     image: postgres:15.2
     restart: always
@@ -32,7 +29,6 @@ services:
     container_name: ${DB_NAME}
     volumes:
       - postgres-db:/var/lib/postgresql/data
-
 
 volumes:
   postgres-db:
