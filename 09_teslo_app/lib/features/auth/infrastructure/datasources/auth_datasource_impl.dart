@@ -40,8 +40,20 @@ class AuthDatasourceImpl extends AuthDatasource {
           data: {'email': email, 'password': password, 'fullName': fullName});
 
       return UserMapper.userJsonToEntity(response.data);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 400) {
+        throw CustomError(
+            message: e.response?.data['message'] ?? 'bad request');
+      }
+      if (e.type == DioExceptionType.connectionTimeout) {
+        throw CustomError(
+          message: 'Connection failed',
+        );
+      }
+
+      throw Exception();
     } catch (e) {
-      throw RegistrationFailed();
+      throw Exception();
     }
   }
 }

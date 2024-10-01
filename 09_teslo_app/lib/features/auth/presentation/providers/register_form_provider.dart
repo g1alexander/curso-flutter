@@ -1,8 +1,91 @@
-//TODO: 1 state provider
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
+import 'package:teslo_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:teslo_app/features/shared/shared.dart';
+
+//TODO: 3 consume notifier - statenotifierprovider
+
+final registerFormProvider =
+    StateNotifierProvider.autoDispose<RegisterFormNotifier, RegisterFormState>(
+        (ref) {
+  final registerUserCallback = ref.watch(authProvider.notifier).registerUser;
+
+  return RegisterFormNotifier(registerUserCallback: registerUserCallback);
+});
+
+//TODO: 2 impl notifier
+
+class RegisterFormNotifier extends StateNotifier<RegisterFormState> {
+  Future<void> Function(String, String, String) registerUserCallback;
+
+  RegisterFormNotifier({required this.registerUserCallback})
+      : super(RegisterFormState());
+
+  onFullnameChange(String value) {
+    final newFullname = Fullname.dirty(value);
+
+    state = state.copyWith(
+        fullname: newFullname,
+        isValid: Formz.validate(
+            [newFullname, state.email, state.password, state.repeatPassword]));
+  }
+
+  onEmailChange(String value) {
+    final newEmail = Email.dirty(value);
+
+    state = state.copyWith(
+        email: newEmail,
+        isValid: Formz.validate(
+            [newEmail, state.password, state.fullname, state.repeatPassword]));
+  }
+
+  onPasswordChange(String value) {
+    final newPassword = Password.dirty(value);
+
+    state = state.copyWith(
+        password: newPassword,
+        isValid: Formz.validate(
+            [newPassword, state.email, state.fullname, state.repeatPassword]));
+  }
+
+  onRepeatPasswordChange(String value) {
+    final newRepeatPassword = Password.dirty(value);
+
+    state = state.copyWith(
+        repeatPassword: newRepeatPassword,
+        isValid: Formz.validate(
+            [newRepeatPassword, state.email, state.fullname, state.password]));
+  }
+
+  onFormSubmit() async {
+    _touchEveryField();
+
+    if (!state.isValid) return;
+
+    await registerUserCallback(
+      state.email.value,
+      state.password.value,
+      state.fullname.value,
+    );
+  }
+
+  _touchEveryField() {
+    final email = Email.dirty(state.email.value);
+    final password = Password.dirty(state.password.value);
+    final fullname = Fullname.dirty(state.fullname.value);
+    final repeatPassword = Password.dirty(state.repeatPassword.value);
+
+    state = state.copyWith(
+        isFormPosted: true,
+        email: email,
+        password: password,
+        fullname: fullname,
+        repeatPassword: repeatPassword,
+        isValid: Formz.validate([password, email, fullname, repeatPassword]));
+  }
+}
+
+//TODO: 1 state provider
 
 class RegisterFormState {
   final bool isPosting;
@@ -58,76 +141,3 @@ class RegisterFormState {
     """;
   }
 }
-
-//TODO: 2 impl notifier
-
-class RegisterFormNotifier extends StateNotifier<RegisterFormState> {
-  RegisterFormNotifier() : super(RegisterFormState());
-
-  onFullnameChange(String value) {
-    final newFullname = Fullname.dirty(value);
-
-    state = state.copyWith(
-        fullname: newFullname,
-        isValid: Formz.validate(
-            [newFullname, state.email, state.password, state.repeatPassword]));
-  }
-
-  onEmailChange(String value) {
-    final newEmail = Email.dirty(value);
-
-    state = state.copyWith(
-        email: newEmail,
-        isValid: Formz.validate(
-            [newEmail, state.password, state.fullname, state.repeatPassword]));
-  }
-
-  onPasswordChange(String value) {
-    final newPassword = Password.dirty(value);
-
-    state = state.copyWith(
-        password: newPassword,
-        isValid: Formz.validate(
-            [newPassword, state.email, state.fullname, state.repeatPassword]));
-  }
-
-  onRepeatPasswordChange(String value) {
-    final newRepeatPassword = Password.dirty(value);
-
-    state = state.copyWith(
-        repeatPassword: newRepeatPassword,
-        isValid: Formz.validate(
-            [newRepeatPassword, state.email, state.fullname, state.password]));
-  }
-
-  onFormSubmit() {
-    _touchEveryField();
-
-    if (!state.isValid) return;
-
-    print(state);
-  }
-
-  _touchEveryField() {
-    final email = Email.dirty(state.email.value);
-    final password = Password.dirty(state.password.value);
-    final fullname = Fullname.dirty(state.fullname.value);
-    final repeatPassword = Password.dirty(state.repeatPassword.value);
-
-    state = state.copyWith(
-        isFormPosted: true,
-        email: email,
-        password: password,
-        fullname: fullname,
-        repeatPassword: repeatPassword,
-        isValid: Formz.validate([password, email, fullname, repeatPassword]));
-  }
-}
-
-//TODO: 3 consume notifier - statenotifierprovider
-
-final registerFormProvider =
-    StateNotifierProvider.autoDispose<RegisterFormNotifier, RegisterFormState>(
-        (ref) {
-  return RegisterFormNotifier();
-});

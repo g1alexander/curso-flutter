@@ -35,10 +35,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final user = await authRepository.register(email, password, fullName);
 
       _setLoggedUser(user);
-    } on RegistrationFailed {
-      logout('F register');
+    } on CustomError catch (e) {
+      logout(e.message);
     } catch (e) {
-      logout('no controlado login');
+      logout('no controlado');
     }
   }
 
