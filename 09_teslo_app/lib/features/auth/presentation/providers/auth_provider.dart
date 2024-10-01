@@ -13,21 +13,22 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   AuthNotifier({required this.authRepository}) : super(AuthState());
 
-  void loginUser(String email, String password) async {
+  Future<void> loginUser(String email, String password) async {
     await Future.delayed(const Duration(milliseconds: 500));
 
     try {
       final user = await authRepository.login(email, password);
 
       _setLoggedUser(user);
-    } on WrongCredentials {
-      logout('credentials no son correctas');
+    } on CustomError catch (e) {
+      logout(e.message);
     } catch (e) {
       logout('no controlado');
     }
   }
 
-  void registerUser(String email, String password, String fullName) async {
+  Future<void> registerUser(
+      String email, String password, String fullName) async {
     await Future.delayed(const Duration(milliseconds: 500));
 
     try {
@@ -46,7 +47,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> logout(String? errorMessage) async {
     //TODO: clean token
 
-    state.copyWith(
+    state = state.copyWith(
       user: null,
       status: AuthStatus.notAuthenticated,
       errorMessage: errorMessage,
@@ -56,7 +57,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   void _setLoggedUser(User user) {
     //TODO: save token in device
 
-    state.copyWith(
+    state = state.copyWith(
       user: user,
       errorMessage: '',
       status: AuthStatus.authenticated,
