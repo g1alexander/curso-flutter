@@ -4,9 +4,20 @@ import 'package:teslo_app/features/auth/infrastructure/infrastructure.dart';
 
 class AuthDatasourceImpl extends AuthDatasource {
   @override
-  Future<User> checkAuthStatus(String token) {
-    // TODO: implement checkAuthStatus
-    throw UnimplementedError();
+  Future<User> checkAuthStatus(String token) async {
+    try {
+      final response = await Api().get('/auth/check-status',
+          options: Options(headers: {'Authorization': 'Bearer $token'}));
+
+      return UserMapper.userJsonToEntity(response.data);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        throw CustomError(message: 'token not valid');
+      }
+      throw Exception();
+    } catch (e) {
+      throw Exception();
+    }
   }
 
   @override

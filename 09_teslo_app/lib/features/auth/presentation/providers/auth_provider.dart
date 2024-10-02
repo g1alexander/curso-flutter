@@ -1,17 +1,27 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:teslo_app/features/auth/domain/domain.dart';
 import 'package:teslo_app/features/auth/infrastructure/infrastructure.dart';
+import 'package:teslo_app/features/shared/shared.dart';
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final authRepository = AuthRepositoryImpl();
+  final keyValueStorageService = SharedPreferencesStorage();
 
-  return AuthNotifier(authRepository: authRepository);
+  return AuthNotifier(
+    authRepository: authRepository,
+    keyValueStorageService: keyValueStorageService,
+  );
 });
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository authRepository;
+  final KeyValueStorageService keyValueStorageService;
 
-  AuthNotifier({required this.authRepository}) : super(AuthState());
+  AuthNotifier(
+      {required this.authRepository, required this.keyValueStorageService})
+      : super(AuthState()) {
+    checkStatus();
+  }
 
   Future<void> loginUser(String email, String password) async {
     await Future.delayed(const Duration(milliseconds: 500));
@@ -42,10 +52,22 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  void checkStatus() async {}
+  void checkStatus() async {
+    final token = await keyValueStorageService.getValue<String>('token');
 
-  Future<void> logout(String? errorMessage) async {
-    //TODO: clean token
+    if (token == null) return logout();
+
+    try {
+      final user = await authRepository.checkAuthStatus(token);
+
+      _setLoggedUser(user);
+    } catch (e) {
+      logout();
+    }
+  }
+
+  Future<void> logout([String? errorMessage]) async {
+    await keyValueStorageService.removeKey('token');
 
     state = state.copyWith(
       user: null,
@@ -54,8 +76,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
     );
   }
 
-  void _setLoggedUser(User user) {
-    //TODO: save token in device
+  void _setLoggedUser(User user) async {
+    await keyValueStorageService.setKeyValue('token', user.token);
 
     state = state.copyWith(
       user: user,
