@@ -2,6 +2,10 @@ import 'package:teslo_app/config/config.dart';
 import 'package:teslo_app/features/products/products.dart';
 
 class ProductsDatasourceImpl extends ProductsDatasource {
+  final String accessToken;
+
+  ProductsDatasourceImpl({required this.accessToken});
+
   @override
   Future<Product> createUpdateProduct(Map<String, dynamic> productLike) {
     // TODO: implement createUpdateProduct
@@ -17,7 +21,8 @@ class ProductsDatasourceImpl extends ProductsDatasource {
   @override
   Future<List<Product>> getProductsByPage(
       {int limit = 10, int offset = 0}) async {
-    final response = await Api().get<List?>('/products?$limit=10&$offset=0');
+    final response =
+        await Api().get<List?>('/products?limit=$limit&offset=$offset');
 
     final List<Product> products = [];
 
