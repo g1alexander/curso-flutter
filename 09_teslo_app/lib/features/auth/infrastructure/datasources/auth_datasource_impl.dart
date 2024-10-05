@@ -6,11 +6,10 @@ class AuthDatasourceImpl extends AuthDatasource {
   @override
   Future<User> checkAuthStatus(String token) async {
     try {
-      final response = await Api().get('/auth/check-status',
-          options: Options(headers: {'Authorization': 'Bearer $token'}));
+      final response = await Api(accessToken: token).get('/auth/check-status');
 
       return UserMapper.userJsonToEntity(response.data);
-    } on DioException catch (e) {
+    } on ErrorApi catch (e) {
       if (e.response?.statusCode == 401) {
         throw CustomError(message: 'token not valid');
       }
@@ -27,12 +26,12 @@ class AuthDatasourceImpl extends AuthDatasource {
           .post('/auth/login', data: {'email': email, 'password': password});
 
       return UserMapper.userJsonToEntity(response.data);
-    } on DioException catch (e) {
+    } on ErrorApi catch (e) {
       if (e.response?.statusCode == 401) {
         throw CustomError(
             message: e.response?.data['message'] ?? 'credentials not valid');
       }
-      if (e.type == DioExceptionType.connectionTimeout) {
+      if (e.type == ErrorApi.connectionTimeout) {
         throw CustomError(
           message: 'Connection failed',
         );
@@ -51,12 +50,12 @@ class AuthDatasourceImpl extends AuthDatasource {
           data: {'email': email, 'password': password, 'fullName': fullName});
 
       return UserMapper.userJsonToEntity(response.data);
-    } on DioException catch (e) {
+    } on ErrorApi catch (e) {
       if (e.response?.statusCode == 400) {
         throw CustomError(
             message: e.response?.data['message'] ?? 'bad request');
       }
-      if (e.type == DioExceptionType.connectionTimeout) {
+      if (e.type == ErrorApi.connectionTimeout) {
         throw CustomError(
           message: 'Connection failed',
         );
