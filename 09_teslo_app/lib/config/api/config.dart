@@ -11,6 +11,23 @@ class Api {
           headers: {'Authorization': 'Bearer $accessToken'},
         ));
 
+  Future<ResponseEntity<T>> request<T>(
+    String url, {
+    Object? data,
+    String? method,
+  }) async {
+    return _handleExceptions(() async {
+      final response = await _dio.request<T>(url,
+          data: data, options: Options(method: method));
+
+      return ResponseEntity<T>(
+        message: response.statusMessage ?? 'No message',
+        status: response.statusCode ?? 0,
+        data: response.data as T,
+      );
+    });
+  }
+
   Future<ResponseEntity<T>> post<T>(String url, {Object? data}) async {
     return _handleExceptions(() async {
       final response = await _dio.post<T>(url, data: data);

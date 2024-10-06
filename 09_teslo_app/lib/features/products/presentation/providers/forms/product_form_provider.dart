@@ -6,16 +6,21 @@ import 'package:teslo_app/features/shared/shared.dart';
 
 final productFormProvider = StateNotifierProvider.autoDispose
     .family<ProductFormNotifier, ProductFormState, Product>((ref, product) {
-  //TODO: create update function
+  // final createUpdateCallback =
+  //     ref.watch(productsRepositoryProvider).createUpdateProduct;
+
+  final createUpdateCallback =
+      ref.watch(productsProvider.notifier).createOrUpdateProduct;
 
   return ProductFormNotifier(
     product: product,
-    // onSubmitCallback:
+    onSubmitCallback: createUpdateCallback,
   );
 });
 
 class ProductFormNotifier extends StateNotifier<ProductFormState> {
-  final void Function(Map<String, dynamic> productLike)? onSubmitCallback;
+  final Future<bool> Function(Map<String, dynamic> productLike)?
+      onSubmitCallback;
 
   ProductFormNotifier({
     this.onSubmitCallback,
@@ -40,7 +45,7 @@ class ProductFormNotifier extends StateNotifier<ProductFormState> {
     if (onSubmitCallback == null) return false;
 
     final productLike = {
-      'id': state.id,
+      'id': state.id == 'new' ? null : state.id,
       'title': state.title.value,
       'price': state.price.value,
       'description': state.description,
@@ -48,16 +53,18 @@ class ProductFormNotifier extends StateNotifier<ProductFormState> {
       'stock': state.inStock.value,
       'sizes': state.sizes,
       'gender': state.gender,
-      'tags': state.tags.split(','),
+      'tags': state.tags.split(', '),
       'images': state.images
           .map((image) =>
               image.replaceAll('${Environment.apiUrl}/files/product/', ''))
           .toList()
     };
 
-    //TODO: submit
-
-    return true;
+    try {
+      return await onSubmitCallback!(productLike);
+    } catch (e) {
+      return false;
+    }
   }
 
   void _touchedEverything() {

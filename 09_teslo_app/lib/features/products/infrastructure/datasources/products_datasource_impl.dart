@@ -7,9 +7,24 @@ class ProductsDatasourceImpl extends ProductsDatasource {
   ProductsDatasourceImpl({required this.accessToken});
 
   @override
-  Future<Product> createUpdateProduct(Map<String, dynamic> productLike) {
-    // TODO: implement createUpdateProduct
-    throw UnimplementedError();
+  Future<Product> createUpdateProduct(Map<String, dynamic> productLike) async {
+    try {
+      final String? id = productLike['id'];
+      final String method = id == null ? 'POST' : 'PATCH';
+      final String url = id == null ? '/products' : '/products/$id';
+
+      productLike.remove('id');
+
+      final response = await Api(accessToken: accessToken).request(
+        url,
+        data: productLike,
+        method: method,
+      );
+
+      return ProductMapper.jsonToEntity(response.data);
+    } catch (e) {
+      throw Exception();
+    }
   }
 
   @override
