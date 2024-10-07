@@ -11,6 +11,14 @@ class Api {
           headers: {'Authorization': 'Bearer $accessToken'},
         ));
 
+  static FormData formDataFromMap({
+    required String key,
+    required String path,
+    required String filename,
+  }) =>
+      FormData.fromMap(
+          {key: MultipartFile.fromFileSync(path, filename: filename)});
+
   Future<ResponseEntity<T>> request<T>(
     String url, {
     Object? data,

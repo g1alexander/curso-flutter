@@ -5,7 +5,7 @@ import 'package:teslo_app/features/shared/shared.dart';
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final authRepository = AuthRepositoryImpl();
-  final keyValueStorageService = SharedPreferencesStorage();
+  final keyValueStorageService = KeyValueStorageServiceImpl();
 
   return AuthNotifier(
     authRepository: authRepository,

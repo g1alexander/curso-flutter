@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:teslo_app/features/shared/services/key_value_storage_service.dart';
+import 'package:teslo_app/features/shared/shared.dart';
 
-class SharedPreferencesStorage extends KeyValueStorageService {
+class KeyValueStorageServiceImpl extends KeyValueStorageService {
   Future<SharedPreferences> getInstance() async =>
       await SharedPreferences.getInstance();
 
